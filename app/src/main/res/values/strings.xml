@@ -1,0 +1,122 @@
+<resources>
+    <string name="app_name">Stalker2Ai</string>
+
+    <!-- Настройки -->
+    <string name="settings_title">Настройки</string>
+    <string name="sound_option">Звуки</string>
+    <string name="sound_on">Вкл</string>
+    <string name="sound_off">Выкл</string>
+    <string name="about_app_title">О приложении&#8230;</string>
+    <string name="arrow_symbol">&#8250;</string>
+    <string name="btn_open_folder">Открыть папку с файлами</string>
+
+    <!-- Диалог "О приложении" -->
+    <string name="dialog_about_title">О приложении</string>
+    <string name="dialog_about_message">Теперь ты в команде Stalker 2 AI!\n\nЭто приложение с помощью ИИ и силы Вселенной делает твой коп незабываемым!\n\nТащщ разработчик МД Stalker2AI:\n\n<b><i>jack_by&#64;mail.ru</i></b>\n\nТащщ разработчик сего ПО:\n\n<b><i>JoyJoTix&#64;gmail.com</i></b>\n\nВерсия 1.0.0</string>
+    <string name="dialog_positive_button">Понятно</string>
+
+    <!-- Основной экран -->
+    <string name="main_title">Stalker 2 AI</string>
+    <string name="btn_bluetooth">Bluetooth</string>
+    <string name="btn_wifi">Wi-Fi</string>
+    <string name="btn_mobile">Мобильные данные</string>
+    <string name="btn_data_folder">Папка данных</string>
+    <string name="status_detector_on">Детектор подключён</string>
+    <string name="status_detector_off">Детектор отключён</string>
+    <string name="status_server">Связь с сервером</string>
+    <string name="status_auth">Авторизация МК</string>
+    <string name="files_header">Список находок</string>
+    <string name="btn_clear_list">Очистить список</string>
+
+    <!-- Диалог очистки -->
+    <string name="clear_dialog_title">Очистка списка</string>
+    <string name="clear_dialog_message">Удалится весь список файлов из приложения и из памяти телефона. Вы согласны?</string>
+
+    <!-- Разрешение на установку -->
+    <string name="install_permission_title">Разрешение на установку</string>
+    <string name="install_permission_message">Для корректной работы обновлений приложению требуется разрешение на установку из внешних источников. Пожалуйста, включите его в настройках.</string>
+    <string name="install_permission_settings">Настройки</string>
+    <string name="install_permission_later">Позже</string>
+
+    <!-- Уведомления -->
+    <string name="notification_permission_title">Разрешение на уведомления</string>
+    <string name="notification_permission_message">Для отображения индикатора новых данных и корректной работы в фоне приложению нужны уведомления. Пожалуйста, разрешите их.</string>
+    <string name="btn_go_to_settings">В настройки</string>
+    <string name="btn_test_delete">Тестовое удаление</string>
+
+    <!-- BLE Диагностика -->
+    <string name="ble_diagnostic_title">Диагностика Bluetooth соединения</string>
+    <string name="btn_read_uuids">Прочитать UUID детектора</string>
+    <string name="uuids_saved_success">UUID успешно сохранены в файл</string>
+    <string name="uuids_read_error">Ошибка при чтении UUID</string>
+
+    <!-- Диалог добавления находки -->
+    <string name="finding_dialog_title">Описание находки</string>
+    <string name="finding_name_hint">Например, медная монета</string>
+    <string name="finding_desc_hint">Подробное описание</string>
+    <string name="btn_save_finding">Сохранить в КПК</string>
+    <string name="is_useful_label">Находка полезная?</string>
+    <string name="search_location_label">Место поиска:</string>
+    <string name="search_in_water_label">Поиск в воде?</string>
+    <string name="soil_type_label">Тип почвы:</string>
+    <string name="finding_question_label">Что за находка, камрад?</string>
+
+    <!-- Благодарности -->
+    <string name="thank_you_title">Спасибо, камрад!</string>
+    <string name="together_power">Вместе мы сила!</string>
+    <string-array name="gratitude_phrases">
+        <item>Кладуху тебе под катуху!</item>
+        <item>Хорошего дня тебе, друг!</item>
+        <item>Дед Хабар с тобой!</item>
+        <item>Сила есть - копай чернину!</item>
+        <item>Сигналов много - толку мало!</item>
+        <item>Тише идёшь - больше найдёшь!</item>
+        <item>Сделал дело - зарой ямку!</item>
+        <item>Любишь копаться? Люби и копайся!</item>
+        <item>Пробку не поднял - советик потерял!</item>
+        <item>Свой МД милей сигналит!</item>
+    </string-array>
+
+    <string name="btn_describe">Описать</string>
+    <string name="btn_filled">Заполнено</string>
+    <string name="btn_send">Отправить</string>
+    <string name="btn_sent">Отправлено</string>
+
+    <string-array name="useful_options">
+        <item> </item>
+        <item>Да</item>
+        <item>Нет</item>
+    </string-array>
+
+    <string-array name="location_options">
+        <item> </item>
+        <item>поле</item>
+        <item>мусорка</item>
+        <item>пляж</item>
+    </string-array>
+
+    <string-array name="water_options">
+        <item> </item>
+        <item>нет</item>
+        <item>пресная</item>
+        <item>соленая</item>
+    </string-array>
+
+    <string-array name="soil_options">
+        <item> </item>
+        <item>Чернозём</item>
+        <item>Песчаник</item>
+        <item>Супесь</item>
+        <item>Глинозём</item>
+        <item>Суглинок</item>
+        <item>Торфяник</item>
+        <item>Известковая почва</item>
+    </string-array>
+
+    <!-- Уведомления и статусы BLE -->
+    <string name="notification_searching">Поиск детектора&#8230;</string>
+    <string name="notification_connected">Детектор подключён: %1$s</string>
+    <string name="unknown_device">Неизвестно</string>
+    <string name="ble_service_channel_name">Сервис BLE Stalker 2</string>
+    <string name="gatt_data_generic">Данные детектора</string>
+</resources>

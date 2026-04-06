@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvFileName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:layout_marginBottom="20dp"
+            android:textColor="@android:color/black"/>
+
+        <!-- 1. Место поиска -->
+        <LinearLayout
+            android:id="@+id/layoutLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp"
+            android:padding="12dp"
+            android:background="@drawable/bg_spinner_outline"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/search_location_label"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
+            <Spinner
+                android:id="@+id/spinnerLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/location_options"
+                android:background="@null" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_drop_down"
+                android:contentDescription="@null" />
+        </LinearLayout>
+
+        <!-- 2. Поиск в воде -->
+        <LinearLayout
+            android:id="@+id/layoutWater"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp"
+            android:padding="12dp"
+            android:background="@drawable/bg_spinner_outline"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/search_in_water_label"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
+            <Spinner
+                android:id="@+id/spinnerWater"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/water_options"
+                android:background="@null" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_drop_down"
+                android:contentDescription="@null" />
+        </LinearLayout>
+
+        <!-- 3. Тип почвы -->
+        <LinearLayout
+            android:id="@+id/layoutSoil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp"
+            android:padding="12dp"
+            android:background="@drawable/bg_spinner_outline"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/soil_type_label"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
+            <Spinner
+                android:id="@+id/spinnerSoil"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:entries="@array/soil_options"
+                android:background="@null" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_drop_down"
+                android:contentDescription="@null" />
+        </LinearLayout>
+
+        <!-- 4. Полезность -->
+        <LinearLayout
+            android:id="@+id/layoutUseful"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp"
+            android:padding="12dp"
+            android:background="@drawable/bg_spinner_outline"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/is_useful_label"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
+            <Spinner
+                android:id="@+id/spinnerUseful"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/useful_options"
+                android:background="@null" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_drop_down"
+                android:contentDescription="@null" />
+        </LinearLayout>
+
+        <!-- 5. Что за находка -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/finding_question_label"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/etFindingName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/finding_name_hint"
+            android:inputType="textCapSentences"
+            android:maxLength="50"
+            android:importantForAutofill="no"
+            android:padding="12dp"
+            android:background="@drawable/bg_spinner_outline" />
+
+    </LinearLayout>
+</ScrollView>

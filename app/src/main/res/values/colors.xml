@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="splash_background">#C4C7C5</color>
+    <color name="status_connected">#4CAF50</color>
+    <color name="status_disconnected">#F44336</color>
+
+    <color name="green_active">#4CAF50</color>
+    <color name="red_inactive">#F44336</color>
+
+    <!-- UI Elements -->
+    <color name="gray_light">#F0F0F0</color>
+    <color name="divider_color">#DDDDDD</color>
+    <color name="divider_light">#EEEEEE</color>
+    <color name="text_hint_gray">#BBBBBB</color>
+</resources>
