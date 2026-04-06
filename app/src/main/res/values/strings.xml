@@ -30,6 +30,7 @@
     <string name="files_header">Список находок</string>
     <string name="btn_clear_list">Очистить список</string>
     <string name="btn_refresh">Обновить</string>
+    <string name="auth_key_hint">Auth Key</string>
 
     <!-- Диалог очистки -->
     <string name="clear_dialog_title">Очистка списка</string>
