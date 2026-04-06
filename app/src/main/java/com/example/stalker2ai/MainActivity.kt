@@ -35,6 +35,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -126,11 +127,11 @@ class MainActivity : AppCompatActivity() {
 
         setupAuthStatus()
         
-        val btnSettings = findViewById<LinearLayout>(R.id.btnSettings)
-        val btnBluetoothSettings = findViewById<LinearLayout>(R.id.btnBluetoothSettings)
-        val btnWifiSettings = findViewById<LinearLayout>(R.id.btnWifiSettings)
-        val btnMobileSettings = findViewById<LinearLayout>(R.id.btnMobileSettings)
-        val btnClearList = findViewById<LinearLayout>(R.id.btnClearList)
+        val btnSettings = findViewById<ImageButton>(R.id.btnSettings)
+        val btnBluetoothSettings = findViewById<Button>(R.id.btnBluetoothSettings)
+        val btnWifiSettings = findViewById<Button>(R.id.btnWifiSettings)
+        val btnMobileSettings = findViewById<Button>(R.id.btnMobileSettings)
+        val btnClearList = findViewById<Button>(R.id.btnClearList)
 
         btnSettings.setOnClickListener { playSound(); showSettingsDialog() }
         btnBluetoothSettings.setOnClickListener { playSound(); startActivity(Intent(Settings.ACTION_BLUETOOTH_SETTINGS)) }
@@ -170,9 +171,11 @@ class MainActivity : AppCompatActivity() {
         tvAuthStatus = findViewById(R.id.tvAuthStatus)
         rvFiles = findViewById(R.id.rvFiles)
         rvFiles.layoutManager = LinearLayoutManager(this)
-        filesAdapter = FilesAdapter(emptyList()) { file ->
+        filesAdapter = FilesAdapter(emptyList(), { file ->
             showFileOptions(file)
-        }
+        }, { file ->
+            sendFileToServer(file)
+        })
         rvFiles.adapter = filesAdapter
     }
 
@@ -362,8 +365,8 @@ class MainActivity : AppCompatActivity() {
 
         tvOn.setOnClickListener { isSoundEnabled = true; saveSoundSetting(true); bleService?.setSoundEnabled(true); dialog.dismiss() }
         tvOff.setOnClickListener { isSoundEnabled = false; saveSoundSetting(false); bleService?.setSoundEnabled(false); dialog.dismiss() }
-        btnAboutAppSetting.setOnClickListener { playSound(); showAboutDialog(); dialog.dismiss() }
-        btnOpenFolder.setOnClickListener { playSound(); openStalkerFolder(); dialog.dismiss() }
+        btnAboutAppSetting.setOnClickListener { playSound(); showAboutDialog() }
+        btnOpenFolder.setOnClickListener { playSound(); openStalkerFolder() }
         dialog.show()
     }
 
@@ -402,7 +405,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(fileSavedReceiver)
+        try { unregisterReceiver(fileSavedReceiver) } catch (_: Exception) {}
         if (isBound) {
             unbindService(serviceConnection)
             isBound = false

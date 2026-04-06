@@ -5,6 +5,7 @@
     <color name="splash_background">#C4C7C5</color>
     <color name="status_connected">#4CAF50</color>
     <color name="status_disconnected">#F44336</color>
+    <color name="status_connecting">#FF9800</color>
 
     <color name="green_active">#4CAF50</color>
     <color name="red_inactive">#F44336</color>
@@ -14,4 +15,5 @@
     <color name="divider_color">#DDDDDD</color>
     <color name="divider_light">#EEEEEE</color>
     <color name="text_hint_gray">#BBBBBB</color>
+    <color name="text_secondary">#757575</color>
 </resources>
