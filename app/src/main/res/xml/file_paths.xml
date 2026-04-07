@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <files-path name="internal_files" path="." />
     <external-path name="external_files" path="." />
-    <external-path name="stalker_data" path="Stalker2Ai/" />
+    <root-path name="root" path="." />
 </paths>

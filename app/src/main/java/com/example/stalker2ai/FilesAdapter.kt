@@ -39,6 +39,7 @@ class FilesAdapter(
     override fun onBindViewHolder(holder: FileViewHolder, position: Int) {
         val file = files[position]
         val name = file.name
+        
         val halfLength = name.length / 2
         val displayedName = if (halfLength > 0) {
             name.substring(0, halfLength) + "..."
@@ -50,7 +51,6 @@ class FilesAdapter(
         val isSaving = savingFiles.contains(file.absolutePath)
         val isSending = sendingFiles.contains(file.absolutePath)
         
-        // Логика кнопки "Описать"
         if (isSaving) {
             holder.btnDescribe.visibility = View.INVISIBLE
             holder.pbSaving.visibility = View.VISIBLE
@@ -68,7 +68,6 @@ class FilesAdapter(
             }
         }
 
-        // Логика кнопки "Отправить"
         if (isSending) {
             holder.btnSend.visibility = View.INVISIBLE
             holder.pbSending.visibility = View.VISIBLE
@@ -88,7 +87,6 @@ class FilesAdapter(
                 holder.btnSend.setText(R.string.btn_send)
                 holder.btnSend.backgroundTintList = ColorStateList.valueOf("#FF0000".toColorInt())
                 holder.btnSend.isEnabled = isFilled
-                // Если файл не заполнен, делаем кнопку полупрозрачной
                 holder.btnSend.alpha = if (isFilled) 1.0f else 0.4f
             }
         }

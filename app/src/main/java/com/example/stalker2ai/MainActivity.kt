@@ -47,7 +47,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
@@ -417,7 +416,7 @@ class MainActivity : AppCompatActivity() {
             val currentFindingInfo = etFindingName.text.toString().trim()
             val currentUsefulRu = spinnerUseful.selectedItem?.toString() ?: ""
             val currentLocationRu = spinnerLocation.selectedItem?.toString() ?: ""
-            val currentWaterRu = spinnerUseful.selectedItem?.toString() ?: "" // mistake here but following original code structure for now
+            val currentWaterRu = spinnerUseful.selectedItem?.toString() ?: ""
             val currentSoilRu = spinnerSoil.selectedItem?.toString() ?: ""
 
             val isChanged = currentFindingInfo != initialFindingInfo ||
@@ -579,7 +578,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkPermissions() {
-        val p = mutableListOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+        val p = mutableListOf(
+            Manifest.permission.ACCESS_FINE_LOCATION, 
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             p.add(Manifest.permission.BLUETOOTH_CONNECT); p.add(Manifest.permission.BLUETOOTH_SCAN)
         }
@@ -687,24 +691,24 @@ class MainActivity : AppCompatActivity() {
         if (!folder.exists()) {
             folder.mkdirs()
         }
-
+        
+        val uri = Uri.parse("content://com.android.externalstorage.documents/document/primary%3AStalker2Ai")
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(uri, "vnd.android.document/directory")
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        
         try {
-            val uri = FileProvider.getUriForFile(this@MainActivity, "${packageName}.fileprovider", folder)
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(uri, "resource/folder")
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            }
-            startActivity(Intent.createChooser(intent, "Открыть папку"))
-        } catch (_: Exception) {
+            startActivity(intent)
+        } catch (e: Exception) {
             try {
-                val uri = FileProvider.getUriForFile(this@MainActivity, "${packageName}.fileprovider", folder)
-                val intentFallback = Intent(Intent.ACTION_VIEW).apply {
-                    setDataAndType(uri, "*/*")
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                val genericIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "*/*"
                 }
-                startActivity(Intent.createChooser(intentFallback, "Открыть через проводник"))
+                startActivity(Intent.createChooser(genericIntent, "Открыть папку"))
             } catch (_: Exception) {
-                Toast.makeText(this, "Не удалось открыть папку", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Менеджер файлов не найден", Toast.LENGTH_SHORT).show()
             }
         }
     }
