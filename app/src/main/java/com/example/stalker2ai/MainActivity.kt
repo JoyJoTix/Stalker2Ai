@@ -254,9 +254,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body?.string()
+                val responseBody = response.body.string()
                 runOnUiThread {
-                    if (response.isSuccessful && responseBody != null) {
+                    if (response.isSuccessful) {
                         try {
                             val json = JSONObject(responseBody)
                             if (json.optString("status") == "success") {
