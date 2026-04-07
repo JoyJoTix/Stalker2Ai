@@ -92,8 +92,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        sharedPreferences = getSharedPreferences("Stalker2AiPrefs", Context.MODE_PRIVATE)
-        bleDataPrefs = getSharedPreferences("BleDataPrefs", Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences("Stalker2AiPrefs", MODE_PRIVATE)
+        bleDataPrefs = getSharedPreferences("BleDataPrefs", MODE_PRIVATE)
         isSoundEnabled = sharedPreferences.getBoolean("sound_enabled", true)
 
         initViews()
@@ -102,11 +102,11 @@ class MainActivity : AppCompatActivity() {
 
         val intent = Intent(this, BleService::class.java)
         startService(intent)
-        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+        bindService(intent, serviceConnection, BIND_AUTO_CREATE)
 
         val filter = IntentFilter(BleService.ACTION_FILE_SAVED)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(fileSavedReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+            registerReceiver(fileSavedReceiver, filter, RECEIVER_NOT_EXPORTED)
         } else {
             registerReceiver(fileSavedReceiver, filter)
         }
@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBluetooth() {
-        val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        val bluetoothManager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
         bluetoothAdapter = bluetoothManager.adapter
     }
 
@@ -258,9 +258,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body?.string()
+                val responseBody = response.body.string()
                 runOnUiThread {
-                    if (response.isSuccessful && responseBody != null) {
+                    if (response.isSuccessful) {
                         try {
                             val json = JSONObject(responseBody)
                             if (json.optString("status") == "success") {
@@ -301,7 +301,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun forceFullReset() {
-        val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        val bluetoothManager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
         val adapter = bluetoothManager.adapter
         
         if (adapter == null || !adapter.isEnabled) {
@@ -331,7 +331,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun playSound() {
-        val am = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val am = getSystemService(AUDIO_SERVICE) as AudioManager
         if (isSoundEnabled && am.ringerMode == AudioManager.RINGER_MODE_NORMAL) {
             try { toneGenerator?.startTone(ToneGenerator.TONE_PROP_BEEP, 100) } catch (_: Exception) { }
         }
