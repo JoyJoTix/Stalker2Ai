@@ -105,11 +105,7 @@ class MainActivity : AppCompatActivity() {
         bindService(intent, serviceConnection, BIND_AUTO_CREATE)
 
         val filter = IntentFilter(BleService.ACTION_FILE_SAVED)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(fileSavedReceiver, filter, RECEIVER_NOT_EXPORTED)
-        } else {
-            registerReceiver(fileSavedReceiver, filter)
-        }
+        ContextCompat.registerReceiver(this, fileSavedReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
 
         findViewById<Button>(R.id.btnRefresh).setOnClickListener {
             forceFullReset()
@@ -258,9 +254,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body.string()
+                val responseBody = response.body?.string()
                 runOnUiThread {
-                    if (response.isSuccessful) {
+                    if (response.isSuccessful && responseBody != null) {
                         try {
                             val json = JSONObject(responseBody)
                             if (json.optString("status") == "success") {
