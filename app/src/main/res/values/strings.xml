@@ -13,9 +13,7 @@
     <!-- Диалог "О приложении" -->
     <string name="dialog_about_title">О приложении</string>
     <string name="dialog_about_message">Теперь ты в команде Stalker 2 AI!\n\nЭто приложение с помощью ИИ и силы Вселенной делает твой коп незабываемым!\n\nТащщ разработчик МД Stalker2AI:\n\n<b><i>jack_by&#64;mail.ru</i></b>\n\nТащщ разработчик сего ПО:\n\n<b><i>JoyJoTix&#64;gmail.com</i></b>\n\nВерсия 1.0.0</string>
-    <string name="about_app_message">Теперь ты в команде Stalker 2 AI!\n\nЭто приложение с помощью ИИ и силы Вселенной делает твой коп незабываемым!\n\nТащщ разработчик МД Stalker2AI:\n\n<b><i>jack_by&#64;mail.ru</i></b>\n\nТащщ разработчик сего ПО:\n\n<b><i>JoyJoTix&#64;gmail.com</i></b>\n\nВерсия 1.0.0</string>
     <string name="dialog_positive_button">Понятно</string>
-    <string name="dialog_negative_button">Отмена</string>
 
     <!-- Основной экран -->
     <string name="main_title">Stalker 2 AI</string>
@@ -29,14 +27,10 @@
     <string name="status_auth">Авторизация МК</string>
     <string name="files_header">Список находок</string>
     <string name="btn_clear_list">Очистить список</string>
-    <string name="btn_refresh">Обновить</string>
-    <string name="auth_key_hint">Auth Key</string>
 
     <!-- Диалог очистки -->
     <string name="clear_dialog_title">Очистка списка</string>
     <string name="clear_dialog_message">Удалится весь список файлов из приложения и из памяти телефона. Вы согласны?</string>
-    <string name="clear_list_title">Очистить список</string>
-    <string name="clear_list_message">Вы уверены, что хотите очистить список файлов?</string>
 
     <!-- Разрешение на установку -->
     <string name="install_permission_title">Разрешение на установку</string>
@@ -125,18 +119,4 @@
     <string name="unknown_device">Неизвестно</string>
     <string name="ble_service_channel_name">Сервис BLE Stalker 2</string>
     <string name="gatt_data_generic">Данные детектора</string>
-
-    <string name="file_option_send">Отправить</string>
-    <string name="file_option_delete">Удалить</string>
-    <string name="file_deleted">Файл удален</string>
-    <string name="error_no_auth_key">Ключ авторизации не задан</string>
-    <string name="status_sending">Отправка&#8230;</string>
-    <string name="status_ok">ОК</string>
-    <string name="status_error">Ошибка</string>
-    <string name="file_sent_success">Файл успешно отправлен</string>
-    <string name="status_no_key">Нет ключа</string>
-    <string name="status_resetting">Сброс&#8230;</string>
-    <string name="status_connected">Подключено</string>
-    <string name="status_searching">Поиск&#8230;</string>
-    <string name="status_bluetooth_off">BT выключен</string>
 </resources>

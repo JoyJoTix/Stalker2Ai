@@ -7,22 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/etAuthKey"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:hint="@string/auth_key_hint"
-        android:textSize="14sp"
-        android:inputType="text"
-        android:importantForAutofill="no"
-        app:layout_constraintEnd_toStartOf="@+id/btnSettings"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="Autofill" />
-
     <ImageButton
         android:id="@+id/btnSettings"
         android:layout_width="48dp"
@@ -73,16 +57,6 @@
         app:layout_constraintEnd_toEndOf="@+id/btnWifiSettings"
         app:layout_constraintStart_toStartOf="@+id/btnWifiSettings"
         app:layout_constraintTop_toBottomOf="@+id/btnWifiSettings" />
-
-    <Button
-        android:id="@+id/btnRefresh"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/btn_refresh"
-        app:layout_constraintEnd_toEndOf="@+id/btnMobileSettings"
-        app:layout_constraintStart_toStartOf="@+id/btnMobileSettings"
-        app:layout_constraintTop_toBottomOf="@+id/btnMobileSettings" />
 
     <TextView
         android:id="@+id/tvDetectorStatus"
@@ -148,7 +122,7 @@
         android:textStyle="bold"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRefresh" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAuthStatus" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFiles"

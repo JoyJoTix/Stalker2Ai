@@ -12,7 +12,6 @@ import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattDescriptor
 import android.bluetooth.BluetoothProfile
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ServiceInfo
@@ -284,9 +283,9 @@ class BleService : Service() {
     private fun playSound() {
         try {
             val am = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-            if (am.ringerMode == AudioManager.RINGER_MODE_NORMAL) {
-                toneGenerator?.startTone(ToneGenerator.TONE_PROP_ACK, 500)
-            }
+            val maxVol = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+            am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVol, 0)
+            toneGenerator?.startTone(ToneGenerator.TONE_PROP_ACK, 500)
         } catch (e: Exception) {
             Log.e(TAG, "Error playing sound", e)
         }
@@ -337,9 +336,6 @@ class BleService : Service() {
         sendBroadcast(Intent("com.example.stalker2ai.BLE_STATE_CHANGED"))
         updateForegroundState()
     }
-
-    fun isConnected(): Boolean = activeGatts.isNotEmpty()
-    fun forceReset() { disconnectAll() }
 
     override fun onDestroy() {
         disconnectAll()
