@@ -12,7 +12,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -184,7 +183,7 @@ class MainActivity : AppCompatActivity() {
         } catch (_: Exception) {
         }
 
-        val filter = IntentFilter().apply {
+        val filter = android.content.IntentFilter().apply {
             addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
             addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED)
             addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
@@ -280,6 +279,9 @@ class MainActivity : AppCompatActivity() {
             .setMessage(R.string.clear_dialog_message)
             .setPositiveButton("Да") { _, _ ->
                 clearProcessedFiles()
+            }
+            .setNeutralButton(R.string.btn_test_delete) { _, _ ->
+                forceDeleteAllFiles()
             }
             .setNegativeButton("Нет", null)
             .show()
@@ -623,6 +625,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun forceDeleteAllFiles() {
+        val stalkerFolder = File(Environment.getExternalStorageDirectory(), "Stalker2Ai")
+        if (stalkerFolder.exists() && stalkerFolder.isDirectory) {
+            val files = stalkerFolder.listFiles()?.filter { it.isFile && it.extension.lowercase() == "json" } ?: emptyList()
+            var deletedCount = 0
+            files.forEach { file ->
+                if (file.delete()) {
+                    deletedCount++
+                }
+            }
+            Toast.makeText(this, "Тестовое удаление: удалено $deletedCount файлов", Toast.LENGTH_SHORT).show()
+            updateFilesList()
+        }
+    }
+
     private fun isFilledAndSent(file: File): Boolean {
         return try {
             val jsonString = FileInputStream(file).use { it.bufferedReader().readText() }
@@ -699,7 +716,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun playSound() {
         if (isSoundEnabled) {
-            try { toneGenerator?.startTone(ToneGenerator.TONE_PROP_BEEP, 100) } catch (_: Exception) { }
+            try {
+                val am = getSystemService(AUDIO_SERVICE) as AudioManager
+                if (am.ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+                    toneGenerator?.startTone(ToneGenerator.TONE_PROP_BEEP, 100)
+                }
+            } catch (_: Exception) { }
         }
     }
 

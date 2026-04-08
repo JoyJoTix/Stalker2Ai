@@ -283,10 +283,10 @@ class BleService : Service() {
 
     private fun playSound() {
         try {
-            val am = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-            val maxVol = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-            am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVol, 0)
-            toneGenerator?.startTone(ToneGenerator.TONE_PROP_ACK, 500)
+            val am = getSystemService(AUDIO_SERVICE) as AudioManager
+            if (am.ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+                toneGenerator?.startTone(ToneGenerator.TONE_PROP_ACK, 500)
+            }
         } catch (e: Exception) {
             Log.e(TAG, "Error playing sound", e)
         }
