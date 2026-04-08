@@ -607,8 +607,40 @@ class MainActivity : AppCompatActivity() {
         val stalkerFolder = File(Environment.getExternalStorageDirectory(), "Stalker2Ai")
         if (stalkerFolder.exists() && stalkerFolder.isDirectory) {
             val files = stalkerFolder.listFiles()?.filter { it.isFile && it.extension.lowercase() == "json" } ?: emptyList()
-            files.forEach { it.delete() }
+            var deletedCount = 0
+            files.forEach { file ->
+                if (isFilledAndSent(file)) {
+                    if (file.delete()) {
+                        deletedCount++
+                    }
+                }
+            }
+            if (deletedCount > 0) {
+                Toast.makeText(this, "Удалено файлов: $deletedCount", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Нет файлов со статусом 'Заполнено' и 'Отправлено'", Toast.LENGTH_SHORT).show()
+            }
             updateFilesList()
+        }
+    }
+
+    private fun isFilledAndSent(file: File): Boolean {
+        return try {
+            val jsonString = FileInputStream(file).use { it.bufferedReader().readText() }
+            val jsonObject = JSONObject(jsonString)
+            
+            // Проверка статуса "Заполнено" (аналогично логике в FilesAdapter)
+            val isUseful = jsonObject.optString("is_useful", "")
+            val location = jsonObject.optString("search_location", "")
+            val water = jsonObject.optString("search_water", "")
+            val isFilled = isUseful.isNotEmpty() && location.isNotEmpty() && water.isNotEmpty()
+            
+            // Проверка статуса "Отправлено"
+            val isSent = jsonObject.optBoolean("is_sent", false)
+            
+            isFilled && isSent
+        } catch (e: Exception) {
+            false
         }
     }
 
