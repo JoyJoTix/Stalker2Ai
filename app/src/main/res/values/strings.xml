@@ -30,7 +30,7 @@
 
     <!-- Диалог очистки -->
     <string name="clear_dialog_title">Очистка списка</string>
-    <string name="clear_dialog_message">Удалится весь список файлов из приложения и из памяти телефона. Вы согласны?</string>
+    <string name="clear_dialog_message">Из памяти будут удалены только те файлы, которые уже заполнены и отправлены на сервер. Продолжить?</string>
 
     <!-- Разрешение на установку -->
     <string name="install_permission_title">Разрешение на установку</string>

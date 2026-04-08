@@ -19,7 +19,6 @@ import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.media.ToneGenerator
 import android.net.ConnectivityManager
-import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
@@ -280,7 +279,7 @@ class MainActivity : AppCompatActivity() {
             .setTitle(R.string.clear_dialog_title)
             .setMessage(R.string.clear_dialog_message)
             .setPositiveButton("Да") { _, _ ->
-                testDeleteAllFiles()
+                clearProcessedFiles()
             }
             .setNegativeButton("Нет", null)
             .show()
@@ -603,7 +602,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun testDeleteAllFiles() {
+    private fun clearProcessedFiles() {
         val stalkerFolder = File(Environment.getExternalStorageDirectory(), "Stalker2Ai")
         if (stalkerFolder.exists() && stalkerFolder.isDirectory) {
             val files = stalkerFolder.listFiles()?.filter { it.isFile && it.extension.lowercase() == "json" } ?: emptyList()
@@ -629,17 +628,19 @@ class MainActivity : AppCompatActivity() {
             val jsonString = FileInputStream(file).use { it.bufferedReader().readText() }
             val jsonObject = JSONObject(jsonString)
             
-            // Проверка статуса "Заполнено" (аналогично логике в FilesAdapter)
+            val info = jsonObject.optString("finding_info", "")
             val isUseful = jsonObject.optString("is_useful", "")
             val location = jsonObject.optString("search_location", "")
             val water = jsonObject.optString("search_water", "")
-            val isFilled = isUseful.isNotEmpty() && location.isNotEmpty() && water.isNotEmpty()
+            val soil = jsonObject.optString("search_soil", "")
             
-            // Проверка статуса "Отправлено"
+            val isFilled = info.isNotEmpty() && isUseful.isNotEmpty() && 
+                           location.isNotEmpty() && water.isNotEmpty() && soil.isNotEmpty()
+            
             val isSent = jsonObject.optBoolean("is_sent", false)
             
             isFilled && isSent
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
     }
@@ -724,7 +725,7 @@ class MainActivity : AppCompatActivity() {
             folder.mkdirs()
         }
         
-        val uri = Uri.parse("content://com.android.externalstorage.documents/document/primary%3AStalker2Ai")
+        val uri = "content://com.android.externalstorage.documents/document/primary%3AStalker2Ai".toUri()
         val intent = Intent(Intent.ACTION_VIEW).apply {
             setDataAndType(uri, "vnd.android.document/directory")
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -732,7 +733,7 @@ class MainActivity : AppCompatActivity() {
         
         try {
             startActivity(intent)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             try {
                 val genericIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)

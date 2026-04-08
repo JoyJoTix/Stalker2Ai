@@ -116,10 +116,15 @@ class FilesAdapter(
                 stream.bufferedReader().use { it.readText() }
             }
             val jsonObject = JSONObject(jsonString)
+            
+            val info = jsonObject.optString("finding_info", "")
             val isUseful = jsonObject.optString("is_useful", "")
             val location = jsonObject.optString("search_location", "")
             val water = jsonObject.optString("search_water", "")
-            isUseful.isNotEmpty() && location.isNotEmpty() && water.isNotEmpty()
+            val soil = jsonObject.optString("search_soil", "")
+            
+            info.isNotEmpty() && isUseful.isNotEmpty() && 
+            location.isNotEmpty() && water.isNotEmpty() && soil.isNotEmpty()
         } catch (_: Exception) {
             false
         }
