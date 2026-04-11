@@ -19,7 +19,6 @@ import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.media.ToneGenerator
 import android.net.ConnectivityManager
-import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
@@ -28,14 +27,11 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.provider.Settings
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Spinner
@@ -339,7 +335,6 @@ class MainActivity : AppCompatActivity() {
     private fun showFileDescriptionDialog(file: File) {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_file_description, findViewById(android.R.id.content), false)
         val tvFileName = dialogView.findViewById<TextView>(R.id.tvFileName)
-        val etFindingName = dialogView.findViewById<EditText>(R.id.etFindingName)
         val spinnerUseful = dialogView.findViewById<Spinner>(R.id.spinnerUseful)
         val spinnerLocation = dialogView.findViewById<Spinner>(R.id.spinnerLocation)
         val spinnerWater = dialogView.findViewById<Spinner>(R.id.spinnerWater)
@@ -373,7 +368,6 @@ class MainActivity : AppCompatActivity() {
             val jsonObject = JSONObject(jsonString)
             
             initialFindingInfo = jsonObject.optString("finding_info", "")
-            etFindingName.setText(initialFindingInfo)
 
             initialUsefulRu = when(jsonObject.optString("is_useful", "")) {
                 "Yes" -> "Да"
@@ -428,7 +422,6 @@ class MainActivity : AppCompatActivity() {
                 AlertDialog.Builder(this)
                     .setMessage("Камрад, всё правильно указал?")
                     .setPositiveButton("Конечно") { _, _ ->
-                        val findingInfo = etFindingName.text.toString().trim()
                         val usefulRu = spinnerUseful.selectedItem?.toString() ?: ""
                         val locationRu = spinnerLocation.selectedItem?.toString() ?: ""
                         val waterRu = spinnerWater.selectedItem?.toString() ?: ""
@@ -447,7 +440,7 @@ class MainActivity : AppCompatActivity() {
                             "Известковая почва" -> "lime_soil"
                             else -> ""
                         }
-                        updateJsonFileWithProgress(file, findingInfo, usefulEn, locationEn, waterEn, soilEn)
+                        updateJsonFileWithProgress(file, initialFindingInfo, usefulEn, locationEn, waterEn, soilEn)
                         alertDialog.dismiss() // Закрываем основное окно только после подтверждения
                     }
                     .setNegativeButton("Сейчас проверю", null) // Просто закрывает диалог подтверждения
@@ -456,20 +449,17 @@ class MainActivity : AppCompatActivity() {
 
             // Изначальная валидация
             val validate = {
-                val currentFindingInfo = etFindingName.text.toString().trim()
                 val currentUsefulRu = spinnerUseful.selectedItem?.toString() ?: ""
                 val currentLocationRu = spinnerLocation.selectedItem?.toString() ?: ""
                 val currentWaterRu = spinnerWater.selectedItem?.toString() ?: ""
                 val currentSoilRu = spinnerSoil.selectedItem?.toString() ?: ""
 
-                val isChanged = currentFindingInfo != initialFindingInfo ||
-                                currentUsefulRu != initialUsefulRu || 
+                val isChanged = currentUsefulRu != initialUsefulRu || 
                                 currentLocationRu != initialLocationRu || 
                                 currentWaterRu != initialWaterRu ||
                                 currentSoilRu != initialSoilRu
                 
-                val isAllFilled = currentFindingInfo.isNotEmpty() &&
-                                  currentUsefulRu.trim().isNotEmpty() && 
+                val isAllFilled = currentUsefulRu.trim().isNotEmpty() && 
                                   currentLocationRu.trim().isNotEmpty() && 
                                   currentWaterRu.trim().isNotEmpty() &&
                                   currentSoilRu.trim().isNotEmpty()
@@ -478,12 +468,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             validate() // Проверяем состояние при открытии
-
-            etFindingName.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) { validate() }
-            })
 
             val itemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) { validate() }

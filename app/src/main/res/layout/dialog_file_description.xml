@@ -158,26 +158,5 @@
                 android:contentDescription="@null" />
         </LinearLayout>
 
-        <!-- 5. Что за находка -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/finding_question_label"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
-        <EditText
-            android:id="@+id/etFindingName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/finding_name_hint"
-            android:inputType="textCapSentences"
-            android:maxLength="50"
-            android:importantForAutofill="no"
-            android:padding="12dp"
-            android:background="@drawable/bg_spinner_outline" />
-
     </LinearLayout>
 </ScrollView>
