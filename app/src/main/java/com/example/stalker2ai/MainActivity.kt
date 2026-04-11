@@ -489,7 +489,10 @@ class MainActivity : AppCompatActivity() {
         val alertDialog = AlertDialog.Builder(this).setView(dialogView).setCancelable(true).create()
         dialogView.findViewById<View>(R.id.rootGratitude).setOnClickListener { alertDialog.dismiss() }
         alertDialog.show()
-        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        alertDialog.window?.apply {
+            setBackgroundDrawableResource(android.R.color.transparent)
+            setDimAmount(0.89f)
+        }
     }
 
     private fun refreshBluetoothAdapter() {
