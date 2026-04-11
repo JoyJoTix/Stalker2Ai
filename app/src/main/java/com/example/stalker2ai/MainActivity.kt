@@ -281,6 +281,9 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton("Да") { _, _ ->
                 clearProcessedFiles()
             }
+            .setNeutralButton("Тестовое удаление") { _, _ ->
+                clearAllFiles()
+            }
             .setNegativeButton("Нет", null)
             .show()
     }
@@ -619,6 +622,21 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Нет файлов со статусом 'Заполнено' и 'Отправлено'", Toast.LENGTH_SHORT).show()
             }
+            updateFilesList()
+        }
+    }
+
+    private fun clearAllFiles() {
+        val stalkerFolder = File(Environment.getExternalStorageDirectory(), "Stalker2Ai")
+        if (stalkerFolder.exists() && stalkerFolder.isDirectory) {
+            val files = stalkerFolder.listFiles()?.filter { it.isFile && it.extension.lowercase() == "json" } ?: emptyList()
+            var deletedCount = 0
+            files.forEach { file ->
+                if (file.delete()) {
+                    deletedCount++
+                }
+            }
+            Toast.makeText(this, "Удалено всех файлов: $deletedCount", Toast.LENGTH_SHORT).show()
             updateFilesList()
         }
     }
