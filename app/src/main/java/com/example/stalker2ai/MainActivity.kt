@@ -356,13 +356,13 @@ class MainActivity : AppCompatActivity() {
                 else -> ""
             }
             initialSoilRu = when(jsonObject.optString("search_soil", "")) {
-                "chernozem" -> "Чернозём"
-                "sandstone" -> "Песчаник"
-                "sandy_loam" -> "Супесь"
-                "clay" -> "Глинозём"
-                "loam" -> "Суглинок"
-                "peat" -> "Торфяник"
-                "lime_soil" -> "Известковая почва"
+                "Чернозём" -> "chernozem"
+                "Песчаник" -> "sandstone"
+                "Супесь" -> "sandy_loam"
+                "Глинозём" -> "clay"
+                "Суглинок" -> "loam"
+                "Торфяник" -> "peat"
+                "Известковая почва" -> "lime_soil"
                 else -> ""
             }
             
@@ -698,7 +698,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun playSound() {
-        if (isSoundEnabled) {
+        val am = getSystemService(AUDIO_SERVICE) as AudioManager
+        if (isSoundEnabled && am.ringerMode == AudioManager.RINGER_MODE_NORMAL) {
             try { toneGenerator?.startTone(ToneGenerator.TONE_PROP_BEEP, 100) } catch (_: Exception) { }
         }
     }
