@@ -252,7 +252,7 @@ class MainActivity : AppCompatActivity() {
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 }
                 try {
-                    startActivity(Intent.createChooser(textIntent, "Открыть данные как текст"))
+                    startActivity(Intent.createChooser(textIntent, "Выберете программу для открытия файла"))
                 } catch (_: Exception) {
                     Toast.makeText(this, "Нет приложений для просмотра текста", Toast.LENGTH_SHORT).show()
                 }
