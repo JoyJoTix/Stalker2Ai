@@ -233,8 +233,7 @@ class MainActivity : AppCompatActivity() {
         filesAdapter = FilesAdapter(
             emptyList(),
             onFileClick = { _ ->
-                playSound()
-                openStalkerFolder()
+                // Перепишите нажатие на файл здесь
             },
             onDescribeClick = { file ->
                 playSound()
@@ -741,35 +740,10 @@ class MainActivity : AppCompatActivity() {
         tvOn.setOnClickListener { isSoundEnabled = true; saveSoundSetting(true); bleService?.setSoundEnabled(true); updateToggleUI(tvOn, tvOff); playSound() }
         tvOff.setOnClickListener { isSoundEnabled = false; saveSoundSetting(false); bleService?.setSoundEnabled(false); updateToggleUI(tvOn, tvOff) }
         btnAboutAppSetting.setOnClickListener { playSound(); showAboutDialog(); dialog.dismiss() }
-        btnOpenFolder.setOnClickListener { playSound(); openStalkerFolder(); dialog.dismiss() }
+        btnOpenFolder.setOnClickListener {
+            // Перепишите нажатие "Открыть папку" здесь
+        }
         dialog.show()
-    }
-
-    private fun openStalkerFolder() {
-        val folder = File(Environment.getExternalStorageDirectory(), "Stalker2Ai")
-        if (!folder.exists()) {
-            folder.mkdirs()
-        }
-        
-        val uri = "content://com.android.externalstorage.documents/document/primary%3AStalker2Ai".toUri()
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(uri, "vnd.android.document/directory")
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
-        
-        try {
-            startActivity(intent)
-        } catch (_: Exception) {
-            try {
-                val genericIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
-                    addCategory(Intent.CATEGORY_OPENABLE)
-                    type = "*/*"
-                }
-                startActivity(Intent.createChooser(genericIntent, "Открыть папку"))
-            } catch (_: Exception) {
-                Toast.makeText(this, "Менеджер файлов не найден", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
     private fun showAboutDialog() {
