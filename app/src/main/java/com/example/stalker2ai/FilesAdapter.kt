@@ -16,6 +16,7 @@ import java.io.FileInputStream
 
 class FilesAdapter(
     private var files: List<File>,
+    private val onFileClick: (File) -> Unit,
     private val onDescribeClick: (File) -> Unit,
     private val onSendClick: (File) -> Unit
 ) : RecyclerView.Adapter<FilesAdapter.FileViewHolder>() {
@@ -91,6 +92,7 @@ class FilesAdapter(
             }
         }
 
+        holder.tvFileName.setOnClickListener { onFileClick(file) }
         holder.btnDescribe.setOnClickListener { onDescribeClick(file) }
         holder.btnSend.setOnClickListener { onSendClick(file) }
     }
@@ -117,11 +119,11 @@ class FilesAdapter(
             }
             val jsonObject = JSONObject(jsonString)
             
-            val info = jsonObject.optString("finding_info", "")
-            val isUseful = jsonObject.optString("is_useful", "")
-            val location = jsonObject.optString("search_location", "")
-            val water = jsonObject.optString("search_water", "")
-            val soil = jsonObject.optString("search_soil", "")
+            val info = jsonObject.optString("finding_info", "").trim()
+            val isUseful = jsonObject.optString("is_useful", "").trim()
+            val location = jsonObject.optString("search_location", "").trim()
+            val water = jsonObject.optString("search_water", "").trim()
+            val soil = jsonObject.optString("search_soil", "").trim()
             
             info.isNotEmpty() && isUseful.isNotEmpty() && 
             location.isNotEmpty() && water.isNotEmpty() && soil.isNotEmpty()

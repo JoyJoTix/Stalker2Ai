@@ -232,6 +232,10 @@ class MainActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         filesAdapter = FilesAdapter(
             emptyList(),
+            onFileClick = { _ ->
+                playSound()
+                openStalkerFolder()
+            },
             onDescribeClick = { file ->
                 playSound()
                 showFileDescriptionDialog(file)
@@ -359,13 +363,13 @@ class MainActivity : AppCompatActivity() {
                 else -> ""
             }
             initialSoilRu = when(jsonObject.optString("search_soil", "")) {
-                "Чернозём" -> "chernozem"
-                "Песчаник" -> "sandstone"
-                "Супесь" -> "sandy_loam"
-                "Глинозём" -> "clay"
-                "Суглинок" -> "loam"
-                "Торфяник" -> "peat"
-                "Известковая почва" -> "lime_soil"
+                "chernozem" -> "Чернозём"
+                "sandstone" -> "Песчаник"
+                "sandy_loam" -> "Супесь"
+                "clay" -> "Глинозём"
+                "loam" -> "Суглинок"
+                "peat" -> "Торфяник"
+                "lime_soil" -> "Известковая почва"
                 else -> ""
             }
             
@@ -418,7 +422,7 @@ class MainActivity : AppCompatActivity() {
             val currentFindingInfo = etFindingName.text.toString().trim()
             val currentUsefulRu = spinnerUseful.selectedItem?.toString() ?: ""
             val currentLocationRu = spinnerLocation.selectedItem?.toString() ?: ""
-            val currentWaterRu = spinnerUseful.selectedItem?.toString() ?: ""
+            val currentWaterRu = spinnerWater.selectedItem?.toString() ?: ""
             val currentSoilRu = spinnerSoil.selectedItem?.toString() ?: ""
 
             val isChanged = currentFindingInfo != initialFindingInfo ||
