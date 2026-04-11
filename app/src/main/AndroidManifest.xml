@@ -55,16 +55,37 @@
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop">
-            <!-- Интент-фильтр для открытия JSON файлов из папки -->
+
+            <!-- 1. Фильтр по расширению (самый надежный) -->
             <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="file" />
                 <data android:scheme="content" />
+                <data android:host="*" />
+                <data android:pathSuffix=".json" />
+            </intent-filter>
+
+            <!-- 2. Фильтр по MIME-типу -->
+            <intent-filter tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:host="*" />
                 <data android:mimeType="application/json" />
                 <data android:mimeType="text/plain" />
-                <data android:host="*" />
+            </intent-filter>
+
+            <!-- 3. Фильтр для неопределенных типов -->
+            <intent-filter tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:mimeType="*/*" />
                 <data android:pathPattern=".*\\.json" />
             </intent-filter>
         </activity>

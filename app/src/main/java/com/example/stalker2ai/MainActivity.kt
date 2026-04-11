@@ -19,6 +19,7 @@ import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.media.ToneGenerator
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
@@ -227,6 +228,35 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        handleIncomingIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIncomingIntent(intent)
+    }
+
+    private fun handleIncomingIntent(intent: Intent?) {
+        val uri = intent?.data ?: return
+        if (intent.action == Intent.ACTION_VIEW) {
+            val fileName = uri.lastPathSegment?.lowercase() ?: ""
+            val mimeType = intent.type ?: contentResolver.getType(uri) ?: ""
+            
+            if (fileName.endsWith(".json") || mimeType.contains("json")) {
+                // Открываем JSON как текст через системный диалог выбора
+                val textIntent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(uri, "text/plain")
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+                try {
+                    startActivity(Intent.createChooser(textIntent, "Открыть данные как текст"))
+                } catch (_: Exception) {
+                    Toast.makeText(this, "Нет приложений для просмотра текста", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
@@ -806,10 +836,9 @@ class MainActivity : AppCompatActivity() {
                 // 3. Крайний случай - открываем через FileProvider (обычно вызывает выбор сторонних менеджеров)
                 try {
                     val folderUri = FileProvider.getUriForFile(this, "${packageName}.fileprovider", folder)
-                    val lastIntent = Intent(Intent.ACTION_VIEW).apply {
-                        setDataAndType(folderUri, "inode/directory")
-                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    }
+                    val lastIntent = Intent(Intent.ACTION_VIEW)
+                    lastIntent.setDataAndType(folderUri, "resource/folder")
+                    lastIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     startActivity(lastIntent)
                     opened = true
                 } catch (_: Exception) {}
