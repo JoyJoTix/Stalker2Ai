@@ -46,6 +46,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
@@ -233,7 +234,7 @@ class MainActivity : AppCompatActivity() {
         filesAdapter = FilesAdapter(
             emptyList(),
             onFileClick = { _ ->
-                // Перепишите нажатие на файл здесь
+                // В Списке находок файлы не должны открываться
             },
             onDescribeClick = { file ->
                 playSound()
@@ -753,9 +754,71 @@ class MainActivity : AppCompatActivity() {
         tvOff.setOnClickListener { isSoundEnabled = false; saveSoundSetting(false); bleService?.setSoundEnabled(false); updateToggleUI(tvOn, tvOff) }
         btnAboutAppSetting.setOnClickListener { playSound(); showAboutDialog(); dialog.dismiss() }
         btnOpenFolder.setOnClickListener {
-            // Перепишите нажатие "Открыть папку" здесь
+            playSound()
+            openStalkerFolder()
+            dialog.dismiss()
         }
         dialog.show()
+    }
+
+    private fun openStalkerFolder() {
+        val folder = File(Environment.getExternalStorageDirectory(), "Stalker2Ai")
+        if (!folder.exists()) folder.mkdirs()
+
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
+        // Порядок попыток открытия стандартного проводника
+        val systemExplorers = listOf(
+            "com.google.android.documentsui",
+            "com.android.documentsui",
+            "com.sec.android.app.myfiles", // Samsung
+            "com.mi.android.globalFileexplorer", // Xiaomi
+            "com.huawei.hidisk" // Huawei
+        )
+
+        var opened = false
+        // 1. Пробуем открыть через SAF URI (самый правильный способ для системных ФМ)
+        val docUri = "content://com.android.externalstorage.documents/document/primary%3AStalker2Ai".toUri()
+        
+        for (pkg in systemExplorers) {
+            try {
+                packageManager.getPackageInfo(pkg, 0)
+                intent.setPackage(pkg)
+                intent.setDataAndType(docUri, "vnd.android.document/directory")
+                startActivity(intent)
+                opened = true
+                break
+            } catch (_: Exception) {}
+        }
+
+        if (!opened) {
+            // 2. Если не вышло через SAF, пробуем открыть корень как универсальный fallback
+            try {
+                val rootUri = "content://com.android.externalstorage.documents/root/primary".toUri()
+                intent.setPackage(null)
+                intent.setDataAndType(rootUri, "vnd.android.document/root")
+                startActivity(intent)
+                opened = true
+            } catch (_: Exception) {
+                // 3. Крайний случай - открываем через FileProvider (обычно вызывает выбор сторонних менеджеров)
+                try {
+                    val folderUri = FileProvider.getUriForFile(this, "${packageName}.fileprovider", folder)
+                    val lastIntent = Intent(Intent.ACTION_VIEW).apply {
+                        setDataAndType(folderUri, "inode/directory")
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    startActivity(lastIntent)
+                    opened = true
+                } catch (_: Exception) {}
+            }
+        }
+
+        if (!opened) {
+            Toast.makeText(this, "Стандартный проводник не найден. Откройте папку Stalker2Ai вручную.", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun showAboutDialog() {
