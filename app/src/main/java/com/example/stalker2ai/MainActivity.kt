@@ -387,73 +387,85 @@ class MainActivity : AppCompatActivity() {
         val alertDialog = AlertDialog.Builder(this)
             .setTitle(R.string.finding_dialog_title)
             .setView(dialogView)
-            .setPositiveButton("Сохранить") { _, _ ->
-                val findingInfo = etFindingName.text.toString().trim()
-                val usefulRu = spinnerUseful.selectedItem?.toString() ?: ""
-                val locationRu = spinnerLocation.selectedItem?.toString() ?: ""
-                val waterRu = spinnerWater.selectedItem?.toString() ?: ""
-                val soilRu = spinnerSoil.selectedItem?.toString() ?: ""
-                
-                val usefulEn = when(usefulRu) { "Да" -> "Yes"; "Нет" -> "No"; else -> "" }
-                val locationEn = when(locationRu) { "поле" -> "field"; "мусорка" -> "trash"; "пляж" -> "beach"; else -> "" }
-                val waterEn = when(waterRu) { "нет" -> "none"; "пресная" -> "fresh"; "соленая" -> "salt"; else -> "" }
-                val soilEn = when(soilRu) {
-                    "Чернозём" -> "chernozem"
-                    "Песчаник" -> "sandstone"
-                    "Супесь" -> "sandy_loam"
-                    "Глинозём" -> "clay"
-                    "Суглинок" -> "loam"
-                    "Торфяник" -> "peat"
-                    "Известковая почва" -> "lime_soil"
-                    else -> ""
-                }
-                
-                updateJsonFileWithProgress(file, findingInfo, usefulEn, locationEn, waterEn, soilEn)
-            }
+            .setPositiveButton("Сохранить", null) // Устанавливаем null, чтобы обработать нажатие вручную
             .setNegativeButton("Отмена", null)
             .create()
 
+        alertDialog.setOnShowListener {
+            val btnSave = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            btnSave.setOnClickListener {
+                AlertDialog.Builder(this)
+                    .setMessage("Камрад, всё правильно указал?")
+                    .setPositiveButton("Конечно") { _, _ ->
+                        val findingInfo = etFindingName.text.toString().trim()
+                        val usefulRu = spinnerUseful.selectedItem?.toString() ?: ""
+                        val locationRu = spinnerLocation.selectedItem?.toString() ?: ""
+                        val waterRu = spinnerWater.selectedItem?.toString() ?: ""
+                        val soilRu = spinnerSoil.selectedItem?.toString() ?: ""
+                        
+                        val usefulEn = when(usefulRu) { "Да" -> "Yes"; "Нет" -> "No"; else -> "" }
+                        val locationEn = when(locationRu) { "поле" -> "field"; "мусорка" -> "trash"; "пляж" -> "beach"; else -> "" }
+                        val waterEn = when(waterRu) { "нет" -> "none"; "пресная" -> "fresh"; "соленая" -> "salt"; else -> "" }
+                        val soilEn = when(soilRu) {
+                            "Чернозём" -> "chernozem"
+                            "Песчаник" -> "sandstone"
+                            "Супесь" -> "sandy_loam"
+                            "Глинозём" -> "clay"
+                            "Суглинок" -> "loam"
+                            "Торфяник" -> "peat"
+                            "Известковая почва" -> "lime_soil"
+                            else -> ""
+                        }
+                        updateJsonFileWithProgress(file, findingInfo, usefulEn, locationEn, waterEn, soilEn)
+                        alertDialog.dismiss() // Закрываем основное окно только после подтверждения
+                    }
+                    .setNegativeButton("Сейчас проверю", null) // Просто закрывает диалог подтверждения
+                    .show()
+            }
+
+            // Изначальная валидация
+            val validate = {
+                val currentFindingInfo = etFindingName.text.toString().trim()
+                val currentUsefulRu = spinnerUseful.selectedItem?.toString() ?: ""
+                val currentLocationRu = spinnerLocation.selectedItem?.toString() ?: ""
+                val currentWaterRu = spinnerWater.selectedItem?.toString() ?: ""
+                val currentSoilRu = spinnerSoil.selectedItem?.toString() ?: ""
+
+                val isChanged = currentFindingInfo != initialFindingInfo ||
+                                currentUsefulRu != initialUsefulRu || 
+                                currentLocationRu != initialLocationRu || 
+                                currentWaterRu != initialWaterRu ||
+                                currentSoilRu != initialSoilRu
+                
+                val isAllFilled = currentFindingInfo.isNotEmpty() &&
+                                  currentUsefulRu.trim().isNotEmpty() && 
+                                  currentLocationRu.trim().isNotEmpty() && 
+                                  currentWaterRu.trim().isNotEmpty() &&
+                                  currentSoilRu.trim().isNotEmpty()
+                
+                btnSave.isEnabled = isChanged && isAllFilled
+            }
+
+            validate() // Проверяем состояние при открытии
+
+            etFindingName.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable?) { validate() }
+            })
+
+            val itemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) { validate() }
+                override fun onNothingSelected(p0: AdapterView<*>?) { validate() }
+            }
+
+            spinnerUseful.onItemSelectedListener = itemSelectedListener
+            spinnerLocation.onItemSelectedListener = itemSelectedListener
+            spinnerWater.onItemSelectedListener = itemSelectedListener
+            spinnerSoil.onItemSelectedListener = itemSelectedListener
+        }
+
         alertDialog.show()
-        val btnSave = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-        btnSave.isEnabled = false
-
-        val validate = {
-            val currentFindingInfo = etFindingName.text.toString().trim()
-            val currentUsefulRu = spinnerUseful.selectedItem?.toString() ?: ""
-            val currentLocationRu = spinnerLocation.selectedItem?.toString() ?: ""
-            val currentWaterRu = spinnerWater.selectedItem?.toString() ?: ""
-            val currentSoilRu = spinnerSoil.selectedItem?.toString() ?: ""
-
-            val isChanged = currentFindingInfo != initialFindingInfo ||
-                            currentUsefulRu != initialUsefulRu || 
-                            currentLocationRu != initialLocationRu || 
-                            currentWaterRu != initialWaterRu ||
-                            currentSoilRu != initialSoilRu
-            
-            val isAllFilled = currentFindingInfo.isNotEmpty() &&
-                              currentUsefulRu.trim().isNotEmpty() && 
-                              currentLocationRu.trim().isNotEmpty() && 
-                              currentWaterRu.trim().isNotEmpty() &&
-                              currentSoilRu.trim().isNotEmpty()
-            
-            btnSave.isEnabled = isChanged && isAllFilled
-        }
-
-        etFindingName.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) { validate() }
-        })
-
-        val itemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) { validate() }
-            override fun onNothingSelected(p0: AdapterView<*>?) { validate() }
-        }
-
-        spinnerUseful.onItemSelectedListener = itemSelectedListener
-        spinnerLocation.onItemSelectedListener = itemSelectedListener
-        spinnerWater.onItemSelectedListener = itemSelectedListener
-        spinnerSoil.onItemSelectedListener = itemSelectedListener
     }
 
     private fun updateJsonFileWithProgress(file: File, findingInfo: String, useful: String, location: String, water: String, soil: String) {
